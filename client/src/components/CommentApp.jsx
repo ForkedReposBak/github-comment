@@ -27,7 +27,8 @@ function mapStateToProps(state) {
     comments: state.get('comments'),
     login: state.get('login'),
     message: state.get('message'),
-    current_user: state.get('current_user')
+    current_user: state.get('current_user'),
+    display: state.get('display')
   };
 }
 

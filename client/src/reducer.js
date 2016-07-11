@@ -8,6 +8,13 @@ function initApp(state, user_name, repo, page_id, server_url, ssl) {
   );
 }
 
+// 尝试登陆
+function tryLogin(state) {
+  return state.mergeDeep({
+    display: {submit_comment: false, input_control: true, login_url: false}
+  })
+}
+
 // 加载评论列表
 function loadComments(state = Map(), data) {
   const comments = fromJS({"comments": data});
@@ -22,14 +29,20 @@ function createComment(state, data) {
   return z;
 }
 
-// TODO 修改会话状态
+// 用户鉴权请求
 function authRequest(state, data) {
   var ret = {};
   if(data.auth){ // 已登录
-    ret = state.mergeDeep({login: {auth: data.auth},
-            user: {name: data.user_name, avatar: data.avatar_url}});
+    ret = state.mergeDeep({
+                          login: {auth: data.auth},
+                          user: {name: data.user_name, avatar: data.avatar_url},
+                          display: {submit_comment: true, input_control: true, login_url: false}
+                          });
   }else{ // 未登录
-    ret = state.mergeDeep({login: {auth: data.auth, url: data.login_url}});
+    ret = state.mergeDeep({
+                          login: {auth: data.auth, url: data.login_url},
+                          display: {submit_comment: false, input_control: true, login_url: true}
+                          });
   }
   return ret;
 }
@@ -102,6 +115,8 @@ export default function(state, action) {
         ret = state;
       });
       return ret;
+    case 'TRY_LOGIN':
+      return tryLogin(state);
     case 'CREATE_COMMENT':
       var ret = {}
       $.ajax({

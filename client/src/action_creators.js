@@ -13,6 +13,13 @@ export function authRequest() {
   }
 }
 
+// 尝试登陆
+export function tryLogin() {
+  return {
+    type: 'TRY_LOGIN'
+  }
+}
+
 // 加载评论
 export function loadComments(){
   return {

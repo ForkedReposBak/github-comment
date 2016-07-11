@@ -6,10 +6,13 @@ export default class CommentInput extends React.Component {
   constructor(props) {
     super(props);
   }
-  _handleOnClick(e) {
+  _handleOnClickComment(e) {
     const itemText = this.state.value;
     this.props.createComment(itemText);
     this.setState({value: ''});
+  }
+  _handleOnClickLogin(e) {
+    this.props.tryLogin();
   }
   _handleOnChange(e) {
     this.setState({value: e.target.value});
@@ -25,10 +28,16 @@ export default class CommentInput extends React.Component {
                onFocus={ this._handleOnFocus.bind(this) }
                type="text" />
         {
-          this.props.login.get('auth') ?
-          <button className={ styles.comment_button } onClick={ this._handleOnClick.bind(this) }>comment</button>
+          this.props.display.get('submit_comment') ?
+          <button className={ styles.comment_button } onClick={ this._handleOnClickComment.bind(this) }>comment</button>
           :
-          <a className={ styles.login_github_button } href={this.props.login.get('url')} target="_blank">login with github</a>
+          ''
+        }
+        {
+          this.props.display.get('login_url') ?
+          <a onClick={ this._handleOnClickLogin.bind(this) } className={ styles.login_github_button } href={this.props.login.get('url')} target="_blank">login with github</a>
+          :
+          ''
         }
       </footer>
     )
